@@ -1,10 +1,11 @@
-package gomp
+package walk
 
 import (
 	"errors"
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 
@@ -14,28 +15,43 @@ import (
 	"github.com/gyuho/filex"
 )
 
-// GetStdPkg returns all lists of Go standard packages.
+// StdPkg returns all lists of Go standard packages.
 // Usually pass "/usr/local/go".
 // There is an alternative way: https://github.com/golang/tools/blob/master/imports/mkstdlib.go
-func GetStdPkg(goRootPath string) (map[string]bool, error) {
+func StdPkg(goRootPath string) (map[string]bool, error) {
 	if goRootPath == "" {
-		goRootPath = os.Getenv("GOROOT")
+		goRootPath = runtime.GOROOT()
 		if goRootPath == "" {
-			return nil, errors.New("can't find GOROOT: try to set it to /usr/local/go")
+			goRootPath = os.Getenv("GOROOT")
+			if goRootPath == "" {
+				return nil, errors.New("can't find GOROOT: try to set it to /usr/local/go")
+			}
 		}
 	}
 	stdpkgPath := filepath.Join(goRootPath, "src")
 	rmap, err := filex.WalkDir(stdpkgPath)
+
 	if err != nil {
-		log.Println("trying to find the environment variable `GOROOT`")
-		goRootPath = os.Getenv("GOROOT")
+		log.Println("trying to find the runtime `GOROOT`")
+		goRootPath = runtime.GOROOT()
 		stdpkgPath = filepath.Join(goRootPath, "src")
 		log.Println("try with:", stdpkgPath)
 		rmap, err = filex.WalkDir(stdpkgPath)
+
 		if err != nil {
-			return nil, err
+			log.Println("trying to find the environment variable `GOROOT`")
+			goRootPath = os.Getenv("GOROOT")
+			stdpkgPath = filepath.Join(goRootPath, "src")
+			log.Println("try with:", stdpkgPath)
+			rmap, err = filex.WalkDir(stdpkgPath)
+
+			if err != nil {
+				return nil, err
+			}
+
 		}
 	}
+
 	smap := make(map[string]bool)
 	for _, val := range rmap {
 		stdName := strings.Replace(val, stdpkgPath, "", -1)
@@ -62,9 +78,9 @@ func GetStdPkg(goRootPath string) (map[string]bool, error) {
 	return smap, nil
 }
 
-// GetImports gets all import paths from Go source code.
+// Imports gets all import paths from Go source code.
 // It returns the map from import path string to the file paths.
-func GetImports(targetDir string) (map[string][]string, error) {
+func Imports(targetDir string) (map[string][]string, error) {
 	rmap, err := filex.WalkExt(targetDir, ".go")
 	if err != nil {
 		return nil, err
@@ -99,13 +115,13 @@ func GetImports(targetDir string) (map[string][]string, error) {
 	return fmap, nil
 }
 
-// GetNonStdImports get all import paths that are not Go standard package.
-func GetNonStdImports(goRootPath, targetDir string) (map[string][]string, error) {
-	rmap, err := GetImports(targetDir)
+// NonStdImports get all import paths that are not Go standard package.
+func NonStdImports(goRootPath, targetDir string) (map[string][]string, error) {
+	rmap, err := Imports(targetDir)
 	if err != nil {
 		return nil, err
 	}
-	stdMap, err := GetStdPkg(goRootPath)
+	stdMap, err := StdPkg(goRootPath)
 	if err != nil {
 		return nil, err
 	}
