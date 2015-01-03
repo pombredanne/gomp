@@ -12,7 +12,7 @@ gomp is a command line tool for listing imported (non-standard) packages, like p
 
 `gomp -h`:
 
-```go
+```
 Usage of gomp:
   -goroot="/usr/local/go": Specify your GOROOT path. Usually set as /usr/local/go; Default value is set as runtime.GOROOT()
   -output="/home/ubuntu/imports.txt": Specify the output file path. Default value is set as imports.txt at os.Getwd()
@@ -25,4 +25,4 @@ Usage of gomp:
 
 
 
-<i>README.md Updated at 2015-01-03 03:07:22</i>
+<i>README.md Updated at 2015-01-03 03:35:09</i>
