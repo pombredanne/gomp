@@ -3,6 +3,8 @@ package gomp
 import "testing"
 
 func TestGetStdPkg(t *testing.T) {
+	// if it cannot find this directory
+	// it will find the GOROOT environment variable
 	rmap, err := GetStdPkg("/usr/local/go")
 	if err != nil {
 		t.Fatal(err)
