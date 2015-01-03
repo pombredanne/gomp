@@ -13,6 +13,8 @@ func TestGetStdPkg(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	// this may not be accurate for gvm install set-up like Travis CI
 	for key := range rmap {
 		t.Logf("%s", key)
 	}
