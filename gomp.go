@@ -27,8 +27,10 @@ func GetStdPkg(goRootPath string) (map[string]bool, error) {
 	stdpkgPath := filepath.Join(goRootPath, "src")
 	rmap, err := filex.WalkDir(stdpkgPath)
 	if err != nil {
+		log.Println("trying to find the environment variable `GOROOT`")
 		goRootPath = os.Getenv("GOROOT")
 		stdpkgPath = filepath.Join(goRootPath, "src")
+		log.Println("try with:", stdpkgPath)
 		rmap, err = filex.WalkDir(stdpkgPath)
 		if err != nil {
 			return nil, err
