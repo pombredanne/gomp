@@ -27,7 +27,12 @@ func GetStdPkg(goRootPath string) (map[string]bool, error) {
 	stdpkgPath := filepath.Join(goRootPath, "src")
 	rmap, err := filex.WalkDir(stdpkgPath)
 	if err != nil {
-		return nil, err
+		goRootPath = os.Getenv("GOROOT")
+		stdpkgPath = filepath.Join(goRootPath, "src")
+		rmap, err = filex.WalkDir(stdpkgPath)
+		if err != nil {
+			return nil, err
+		}
 	}
 	smap := make(map[string]bool)
 	for _, val := range rmap {
