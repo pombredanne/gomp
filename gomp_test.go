@@ -1,8 +1,12 @@
 package gomp
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
 func TestGetStdPkg(t *testing.T) {
+	t.Log("GOROOT:", os.Getenv("GOROOT"))
 	// if it cannot find this directory
 	// it will find the GOROOT environment variable
 	rmap, err := GetStdPkg("/usr/local/go")
@@ -15,6 +19,7 @@ func TestGetStdPkg(t *testing.T) {
 }
 
 func TestGetImports(t *testing.T) {
+	t.Log("GOROOT:", os.Getenv("GOROOT"))
 	rmap, err := GetImports(".")
 	if err != nil {
 		t.Fatal(err)
@@ -25,6 +30,7 @@ func TestGetImports(t *testing.T) {
 }
 
 func TestGetNonStdImports(t *testing.T) {
+	t.Log("GOROOT:", os.Getenv("GOROOT"))
 	rmap, err := GetNonStdImports("/usr/local/go", ".")
 	if err != nil {
 		t.Fatal(err)
