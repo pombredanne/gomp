@@ -1,3 +1,12 @@
+// gomp is a command line tool for listing imported (non-standard) packages, like pip-freeze in Python.
+//
+// Example:
+//	go get -v github.com/gyuho/gomp // to install
+//	gomp -h // to see the manual page
+//	gomp -target=./go/src/github.com/username/project
+//	// this saves the list of all external packages in the project directory
+//	// It excludes the standard packages.
+//
 package main
 
 import (
