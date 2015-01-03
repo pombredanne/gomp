@@ -4,8 +4,7 @@
 //	go get -v github.com/gyuho/gomp // to install
 //	gomp -h // to see the manual page
 //	gomp -target=./go/src/github.com/username/project
-//	// this saves the list of all external packages in the project directory
-//	// It excludes the standard packages.
+//	// This will extracts the list of all external packages in the project directory excluding Go standard packages.
 //
 package main
 
