@@ -16,8 +16,8 @@ import (
 	"runtime"
 	"sort"
 
-	"github.com/gyuho/filex"
 	"github.com/gyuho/gomp/walk"
+	"github.com/gyuho/iox"
 )
 
 func main() {
@@ -50,7 +50,7 @@ func main() {
 
 	sort.Strings(slice)
 
-	if err := filex.WriteLines(*outputPathPtr, slice); err != nil {
+	if err := iox.LinesToFile(slice, *outputPathPtr); err != nil {
 		log.Fatal(err)
 	}
 }

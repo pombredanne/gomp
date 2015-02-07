@@ -12,7 +12,7 @@ import (
 	"go/parser"
 	"go/token"
 
-	"github.com/gyuho/filex"
+	"github.com/gyuho/iox"
 )
 
 // StdPkg returns all lists of Go standard packages.
@@ -29,21 +29,21 @@ func StdPkg(goRootPath string) (map[string]bool, error) {
 		}
 	}
 	stdpkgPath := filepath.Join(goRootPath, "src")
-	rmap, err := filex.WalkDir(stdpkgPath)
+	rmap, err := iox.WalkDir(stdpkgPath)
 
 	if err != nil {
 		log.Println("trying to find the runtime `GOROOT`")
 		goRootPath = runtime.GOROOT()
 		stdpkgPath = filepath.Join(goRootPath, "src")
 		log.Println("try with:", stdpkgPath)
-		rmap, err = filex.WalkDir(stdpkgPath)
+		rmap, err = iox.WalkDir(stdpkgPath)
 
 		if err != nil {
 			log.Println("trying to find the environment variable `GOROOT`")
 			goRootPath = os.Getenv("GOROOT")
 			stdpkgPath = filepath.Join(goRootPath, "src")
 			log.Println("try with:", stdpkgPath)
-			rmap, err = filex.WalkDir(stdpkgPath)
+			rmap, err = iox.WalkDir(stdpkgPath)
 
 			if err != nil {
 				return nil, err
@@ -81,7 +81,7 @@ func StdPkg(goRootPath string) (map[string]bool, error) {
 // Imports gets all import paths from Go source code.
 // It returns the map from import path string to the file paths.
 func Imports(targetDir string) (map[string][]string, error) {
-	rmap, err := filex.WalkExt(targetDir, ".go")
+	rmap, err := iox.WalkExt(targetDir, ".go")
 	if err != nil {
 		return nil, err
 	}
