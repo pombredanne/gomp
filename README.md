@@ -8,6 +8,7 @@ gomp is a command line tool for listing imported (non-standard) packages, like p
 
 ## Install
 
+
 `go get -v github.com/gyuho/gomp`
 
 `gomp -h`:
@@ -27,4 +28,4 @@ Usage of gomp:
 
 
 
-<i>README.md Updated at 2015-03-14 21:53:41</i>
+<i>README.md Updated at 2015-03-14 21:54:29</i>
