@@ -22,10 +22,3 @@ Usage of gomp:
 
 
 `gomp -target=./go/src/github.com/username/project` will extracts the list of all external packages in the project directory excluding Go standard packages.
-
-
-
-
-
-
-<i>README.md Updated at 2015-03-14 21:57:22</i>
