@@ -9,7 +9,9 @@
 package main
 
 import (
+	"bufio"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -17,7 +19,6 @@ import (
 	"sort"
 
 	"github.com/gyuho/gomp/walk"
-	"github.com/gyuho/iox"
 )
 
 func main() {
@@ -50,7 +51,31 @@ func main() {
 
 	sort.Strings(slice)
 
-	if err := iox.LinesToFile(slice, *outputPathPtr); err != nil {
+	if err := fromLines(slice, *outputPathPtr); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func fromLines(lines []string, fpath string) error {
+	f, err := os.OpenFile(fpath, os.O_RDWR|os.O_TRUNC, 0777)
+	if err != nil {
+		f, err = os.Create(fpath)
+		if err != nil {
+			return err
+		}
+	}
+	defer f.Close()
+
+	// func NewWriter(w io.Writer) *Writer
+	wr := bufio.NewWriter(f)
+
+	for _, line := range lines {
+		// func Fprintln(w io.Writer, a ...interface{}) (n int, err error)
+		fmt.Fprintln(wr, line)
+	}
+
+	if err := wr.Flush(); err != nil {
+		return err
+	}
+	return nil
 }
