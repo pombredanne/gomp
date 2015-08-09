@@ -11,8 +11,6 @@ import (
 
 	"go/parser"
 	"go/token"
-
-	"github.com/gyuho/iox"
 )
 
 // StdPkg returns all lists of Go standard packages.
@@ -29,21 +27,21 @@ func StdPkg(goRootPath string) (map[string]bool, error) {
 		}
 	}
 	stdpkgPath := filepath.Join(goRootPath, "src")
-	rmap, err := iox.WalkDir(stdpkgPath)
+	rmap, err := walkDir(stdpkgPath)
 
 	if err != nil {
 		log.Println("trying to find the runtime `GOROOT`")
 		goRootPath = runtime.GOROOT()
 		stdpkgPath = filepath.Join(goRootPath, "src")
 		log.Println("try with:", stdpkgPath)
-		rmap, err = iox.WalkDir(stdpkgPath)
+		rmap, err = walkDir(stdpkgPath)
 
 		if err != nil {
 			log.Println("trying to find the environment variable `GOROOT`")
 			goRootPath = os.Getenv("GOROOT")
 			stdpkgPath = filepath.Join(goRootPath, "src")
 			log.Println("try with:", stdpkgPath)
-			rmap, err = iox.WalkDir(stdpkgPath)
+			rmap, err = walkDir(stdpkgPath)
 
 			if err != nil {
 				return nil, err
@@ -81,7 +79,7 @@ func StdPkg(goRootPath string) (map[string]bool, error) {
 // Imports gets all import paths from Go source code.
 // It returns the map from import path string to the file paths.
 func Imports(targetDir string) (map[string][]string, error) {
-	rmap, err := iox.WalkExt(targetDir, ".go")
+	rmap, err := walkExt(targetDir, ".go")
 	if err != nil {
 		return nil, err
 	}
@@ -129,6 +127,59 @@ func NonStdImports(goRootPath, targetDir string) (map[string][]string, error) {
 		if _, ok := stdMap[k]; ok {
 			delete(rmap, k)
 		}
+	}
+	return rmap, nil
+}
+
+// walkExt returns all FileInfos with specific extension.
+// Make sure to prefix the extension name with dot.
+// For example, to find all go files, pass ".go".
+func walkExt(targetDir, ext string) (map[os.FileInfo]string, error) {
+	rmap := make(map[os.FileInfo]string)
+	visit := func(path string, f os.FileInfo, err error) error {
+		if f != nil {
+			if !f.IsDir() {
+				if filepath.Ext(path) == ext {
+					if !filepath.HasPrefix(path, ".") && !strings.Contains(path, "/.") {
+						if _, ok := rmap[f]; !ok {
+							wd, err := os.Getwd()
+							if err != nil {
+								return err
+							}
+							thepath := filepath.Join(wd, strings.Replace(path, wd, "", -1))
+							rmap[f] = thepath
+						}
+					}
+				}
+			}
+		}
+		return nil
+	}
+	err := filepath.Walk(targetDir, visit)
+	if err != nil {
+		return nil, err
+	}
+	return rmap, nil
+}
+
+// walkDir returns all directories.
+func walkDir(targetDir string) (map[os.FileInfo]string, error) {
+	rmap := make(map[os.FileInfo]string)
+	visit := func(path string, f os.FileInfo, err error) error {
+		if f != nil {
+			if f.IsDir() {
+				if !filepath.HasPrefix(path, ".") && !strings.Contains(path, "/.") {
+					if _, ok := rmap[f]; !ok {
+						rmap[f] = filepath.Join(targetDir, path)
+					}
+				}
+			}
+		}
+		return nil
+	}
+	err := filepath.Walk(targetDir, visit)
+	if err != nil {
+		return nil, err
 	}
 	return rmap, nil
 }
