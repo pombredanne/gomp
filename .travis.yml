@@ -1,6 +1,8 @@
 language: go
 
-go: 
+sudo: false
+
+go:
   - 1.5
   - tip
 
