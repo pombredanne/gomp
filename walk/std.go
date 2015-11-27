@@ -144,6 +144,7 @@ func StdPkg(goroot string) (map[string]struct{}, error) {
 	if err := sc.Err(); err != nil {
 		return nil, err
 	}
+
 	return pkgs, nil
 }
 
@@ -183,5 +184,6 @@ func StdPkgNaive(goroot string) (map[string]struct{}, error) {
 			smap[stdName] = struct{}{}
 		}
 	}
+
 	return smap, nil
 }
