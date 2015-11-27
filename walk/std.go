@@ -22,13 +22,12 @@ func Imports(targetDir string) (map[string][]string, error) {
 	}
 	rSize := len(rmap)
 
+	var mu sync.Mutex // guards the map
 	fmap := make(map[string][]string)
 
-	var mu sync.Mutex
 	done, errCh := make(chan struct{}), make(chan error)
 
 	for _, fpath := range rmap {
-
 		go func(fpath string) {
 			fset := token.NewFileSet()
 			f, err := parser.ParseFile(fset, fpath, nil, parser.ImportsOnly)
@@ -37,8 +36,8 @@ func Imports(targetDir string) (map[string][]string, error) {
 				return
 			}
 			for _, elem := range f.Imports {
-				mu.Lock()
 				pv := strings.TrimSpace(strings.Replace(elem.Path.Value, `"`, "", -1))
+				mu.Lock()
 				if _, ok := fmap[pv]; !ok {
 					fmap[pv] = []string{fpath}
 				} else {
@@ -48,7 +47,6 @@ func Imports(targetDir string) (map[string][]string, error) {
 			}
 			done <- struct{}{}
 		}(fpath)
-
 	}
 
 	i := 0
