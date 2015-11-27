@@ -66,6 +66,20 @@ func Imports(targetDir string) (map[string][]string, error) {
 	}
 }
 
+// NonStdImports get all import paths that are not Go standard package.
+func NonStdImports(goroot, targetDir string) (map[string][]string, error) {
+	rmap, err := Imports(targetDir)
+	if err != nil {
+		return nil, err
+	}
+	for k := range rmap {
+		if _, ok := GoStandardPackageMap[k]; ok {
+			delete(rmap, k)
+		}
+	}
+	return rmap, nil
+}
+
 func apiFiles(goroot string) (map[string]struct{}, error) {
 	rmap, err := walkExt(filepath.Join(goroot, "api"), ".txt")
 	if err != nil {
@@ -87,20 +101,6 @@ func mustOpen(name string) io.Reader {
 		panic(err)
 	}
 	return f
-}
-
-// NonStdImports get all import paths that are not Go standard package.
-func NonStdImports(goroot, targetDir string) (map[string][]string, error) {
-	rmap, err := Imports(targetDir)
-	if err != nil {
-		return nil, err
-	}
-	for k := range rmap {
-		if _, ok := GoStandardPackageMap[k]; ok {
-			delete(rmap, k)
-		}
-	}
-	return rmap, nil
 }
 
 var sym = regexp.MustCompile(`^pkg (\S+).*?, (?:var|func|type|const) ([A-Z]\w*)`)
