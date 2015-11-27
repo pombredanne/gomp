@@ -17,7 +17,7 @@ func TestWalkDir(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if len(rmap) != 3 {
-		t.Errorf("expected to have 3 sub-directories but got %d", len(rmap))
+	if len(rmap) != 2 {
+		t.Errorf("expected to have 2 sub-directories but got %d", len(rmap))
 	}
 }

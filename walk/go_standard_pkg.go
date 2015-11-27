@@ -2,7 +2,8 @@
 
 package walk
 
-var StandardPackageMap = map[string]struct{}{
+// GoStandardPackageMap contains all Go standard packages.
+var GoStandardPackageMap = map[string]struct{}{
 	"archive":              struct{}{},
 	"archive/tar":          struct{}{},
 	"archive/zip":          struct{}{},

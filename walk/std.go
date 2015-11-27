@@ -96,7 +96,7 @@ func NonStdImports(goroot, targetDir string) (map[string][]string, error) {
 		return nil, err
 	}
 	for k := range rmap {
-		if _, ok := StandardPackageMap[k]; ok {
+		if _, ok := GoStandardPackageMap[k]; ok {
 			delete(rmap, k)
 		}
 	}
