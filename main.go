@@ -32,6 +32,15 @@ type GlobalFlags struct {
 
 	// OutputPath is the filepath to store the output.
 	OutputPath string
+
+	// ShowOnlyExternal is true when you want to list only non-standard packages.
+	ShowOnlyExternal bool
+
+	// IgnoreBuild is true when you want to ignore build tags.
+	// By default, gomp already ignores build contraints by platform.
+	// If this is true, it handles edges cases like `+build ignore` or
+	// 'appengine'.
+	IgnoreBuild bool
 }
 
 var (
@@ -53,6 +62,8 @@ func init() {
 	goRoot := pathpkg.Clean(runtime.GOROOT())
 	rootCmd.PersistentFlags().StringVarP(&globalFlags.GorootPath, "goroot", "g", goRoot, "goroot is your GOROOT path. By default, it uses your runtime.GOROOT().")
 	rootCmd.PersistentFlags().StringVarP(&globalFlags.OutputPath, "output", "o", "", "output is the path to store the results. By default, it prints out to standard output.")
+	rootCmd.PersistentFlags().BoolVarP(&globalFlags.ShowOnlyExternal, "show-external", "e", false, "show-external is true, then it only shows the external dependencies.")
+	rootCmd.PersistentFlags().BoolVarP(&globalFlags.IgnoreBuild, "ignore-build", "i", false, "ignore-build is true, when you want to ignore build tags. By default, gomp already ginores build constraints by platform. If this is true, it handles edge cases like '+build ignore' or 'appenengine'.")
 }
 
 func init() {
@@ -86,7 +97,7 @@ func rootCommandFunc(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	dmap, err := walk.NonStdImports(globalFlags.GorootPath, targetPath)
+	dmap, err := walk.Imports(globalFlags.ShowOnlyExternal, globalFlags.IgnoreBuild, targetPath)
 	if err != nil {
 		return err
 	}

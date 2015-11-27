@@ -8,7 +8,7 @@ import (
 )
 
 func TestImports(t *testing.T) {
-	rmap, err := Imports(".")
+	rmap, err := Imports(false, true, ".")
 	if err != nil {
 		t.Error(err)
 	}
@@ -63,31 +63,3 @@ func TestStdPkg(t *testing.T) {
 	}
 
 }
-
-/*
-func TestStdPkg(t *testing.T) {
-	t.Log("GOROOT:", os.Getenv("GOROOT"))
-	// if it cannot find this directory
-	// it will find the GOROOT environment variable
-	rmap, err := StdPkg("/usr/local/go")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// this may not be accurate for gvm install set-up like Travis CI
-	for key := range rmap {
-		t.Logf("%s", key)
-	}
-}
-
-func TestNonStdImports(t *testing.T) {
-	t.Log("GOROOT:", os.Getenv("GOROOT"))
-	rmap, err := NonStdImports("/usr/local/go", ".")
-	if err != nil {
-		t.Fatal(err)
-	}
-	for key := range rmap {
-		t.Logf("%s", key)
-	}
-}
-*/
