@@ -37,10 +37,6 @@ type GlobalFlags struct {
 var (
 	tabOut      *tabwriter.Writer
 	globalFlags = GlobalFlags{}
-	goRoot      string
-	goPath      string
-	pwd         string
-	projectPath string // project path, to be excluded in its dependencies
 
 	rootCmd = &cobra.Command{
 		Use:        cliName,
@@ -54,8 +50,7 @@ var (
 
 func init() {
 	// https://github.com/golang/go/blob/master/src/go/build/build.go#L292
-	goRoot = pathpkg.Clean(runtime.GOROOT())
-
+	goRoot := pathpkg.Clean(runtime.GOROOT())
 	rootCmd.PersistentFlags().StringVarP(&globalFlags.GorootPath, "goroot", "g", goRoot, "goroot is your GOROOT path. By default, it uses your runtime.GOROOT().")
 	rootCmd.PersistentFlags().StringVarP(&globalFlags.OutputPath, "output", "o", "", "output is the path to store the results. By default, it prints out to standard output.")
 }
@@ -80,7 +75,7 @@ func rootCommandFunc(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	goPath = envOr("GOPATH", "")
+	goPath := envOr("GOPATH", "")
 	pwd, err := os.Getwd()
 	if err != nil {
 		return err
