@@ -1,43 +1,23 @@
 package walk
 
-import (
-	"os"
-	"testing"
-)
+import "testing"
 
-func TestStdPkg(t *testing.T) {
-	t.Log("GOROOT:", os.Getenv("GOROOT"))
-	// if it cannot find this directory
-	// it will find the GOROOT environment variable
-	rmap, err := StdPkg("/usr/local/go")
+func TestWalkExt(t *testing.T) {
+	rmap, err := walkExt(".", ".go")
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
 	}
-
-	// this may not be accurate for gvm install set-up like Travis CI
-	for key := range rmap {
-		t.Logf("%s", key)
+	if len(rmap) != 8 {
+		t.Errorf("expected to have total 8 go files here but got %d", len(rmap))
 	}
 }
 
-func TestImports(t *testing.T) {
-	t.Log("GOROOT:", os.Getenv("GOROOT"))
-	rmap, err := Imports(".")
+func TestWalkDir(t *testing.T) {
+	rmap, err := walkDir(".")
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
 	}
-	for k, v := range rmap {
-		t.Logf("%s | %+v\n", k, v)
-	}
-}
-
-func TestNonStdImports(t *testing.T) {
-	t.Log("GOROOT:", os.Getenv("GOROOT"))
-	rmap, err := NonStdImports("/usr/local/go", ".")
-	if err != nil {
-		t.Fatal(err)
-	}
-	for key := range rmap {
-		t.Logf("%s", key)
+	if len(rmap) != 3 {
+		t.Errorf("expected to have 3 sub-directories but got %d", len(rmap))
 	}
 }
