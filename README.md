@@ -6,8 +6,7 @@ gomp [![Build Status](https://travis-ci.org/gyuho/gomp.svg?branch=master)](https
 
 
 ```
-gomp can list all non-standard packages in your projects.
-This can be useful for checking all the external dependencies.
+gomp lists Go dependencies parsing import paths.
 
 Usage:
   gomp [flags]
