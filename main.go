@@ -1,4 +1,4 @@
-// gomp is a simple command line tool for go import paths.
+// gomp lists Go dependencies parsing import paths.
 package main
 
 import (
