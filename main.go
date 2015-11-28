@@ -17,10 +17,7 @@ import (
 
 const (
 	cliName            = "gomp"
-	cliDescription     = "A simple command line tool for go import paths."
-	cliDescriptionLong = `gomp can list all non-standard packages in your projects.
-This can be useful for checking all the external dependencies.
-`
+	cliDescription     = "gomp lists Go dependencies parsing import paths."
 )
 
 // GlobalFlags contains all the flags defined globally
@@ -50,9 +47,8 @@ var (
 	rootCmd = &cobra.Command{
 		Use:        cliName,
 		Short:      cliDescription,
-		Long:       cliDescriptionLong,
 		SuggestFor: []string{"goomp", "gom", "gmop"},
-		Example:    "'gomp -o imports.txt .' lists all the external dependencies in imports.txt file.",
+		Example:    "'gomp -o imports.txt .' lists all dependencies in the imports.txt file.",
 		RunE:       rootCommandFunc,
 	}
 )
