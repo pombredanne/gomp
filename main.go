@@ -16,8 +16,8 @@ import (
 )
 
 const (
-	cliName            = "gomp"
-	cliDescription     = "gomp lists Go dependencies parsing import paths."
+	cliName        = "gomp"
+	cliDescription = "gomp lists Go dependencies parsing import paths."
 )
 
 // GlobalFlags contains all the flags defined globally
