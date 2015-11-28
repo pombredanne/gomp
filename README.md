@@ -12,7 +12,7 @@ Usage:
   gomp [flags]
 
 Examples:
-'gomp -o imports.txt .' lists all the external dependencies in imports.txt file.
+'gomp -o imports.txt .' lists all dependencies in the imports.txt file.
 
 Flags:
   -g, --goroot="/usr/local/go": goroot is your GOROOT path. By default, it uses your runtime.GOROOT().
