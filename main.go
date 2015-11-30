@@ -9,7 +9,6 @@ import (
 	"runtime"
 	"sort"
 	"strings"
-	"text/tabwriter"
 
 	"github.com/gyuho/gomp/walk"
 	"github.com/spf13/cobra"
@@ -41,7 +40,6 @@ type GlobalFlags struct {
 }
 
 var (
-	tabOut      *tabwriter.Writer
 	globalFlags = GlobalFlags{}
 
 	rootCmd = &cobra.Command{
