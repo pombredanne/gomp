@@ -1,4 +1,4 @@
-gomp [![Build Status](https://travis-ci.org/gyuho/gomp.svg?branch=master)](https://travis-ci.org/gyuho/gomp) [![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/gyuho/gomp)
+gomp [![Build Status](https://img.shields.io/travis/gyuho/gomp.svg?style=flat-square)](https://travis-ci.org/gyuho/gomp) [![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/gyuho/gomp)
 ==========
 
 
