@@ -2,7 +2,7 @@ gomp [![Build Status](https://img.shields.io/travis/gyuho/gomp.svg?style=flat-sq
 ==========
 
 
-`go get -v github.com/gyuho/gomp`
+`go get -v -u github.com/gyuho/gomp`
 
 
 ```
